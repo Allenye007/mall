@@ -4,10 +4,10 @@
   <!-- 头部 -->
   <el-header class="header">
       <el-row>
-        <el-col :span="4"><div class="grid-content bg-purple">12</div></el-col>
+        <el-col :span="4"><div class="grid-content bg-purple"><img id="logo" src="../assets/img/mall_logo_0.png" alt=""></div></el-col>
         <!-- 电商管理 -->
         <el-col :span="18"><div class="grid-content bg-purple-light mid">
-          <h2>后台电商管理</h2>
+          <h2>博真优选</h2>
           </div></el-col>
           <!-- 推出功能 -->
         <el-col :span="2"><div class="grid-content logout-button bg-purple">
@@ -126,6 +126,10 @@ export default {
 .header {
   height: 100%;
   background-color: #b3c0d1;
+}
+#logo {
+  display: inline-block;
+  height: 60px;
 }
 .header .mid {
   line-height: 60px;
