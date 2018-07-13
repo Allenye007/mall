@@ -5,10 +5,11 @@
       <el-input type="text" v-model="formData.username" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item label="密码" prop="checkPass">
-      <el-input type="password" v-model="formData.password" auto-complete="off"></el-input>
+      <!-- 键盘修饰符  当按下 enter时，触发事件 -->
+      <el-input type="password" @keydown.enter.native="handelLogin" v-model="formData.password" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button  type="primary" @click.prevent="handelLogin()" id="login-btn">登录</el-button>
+      <el-button  type="primary" @click.prevent="handelLogin" id="login-btn">登录</el-button>
     </el-form-item>
   </el-form>
 </div>
@@ -26,7 +27,7 @@ export default {
     };
   },
   methods: {
-    handelLogin () {
+    handelLogin() {
       this.$http
         .post('login', this.formData)
         .then((res) => {

@@ -23,29 +23,32 @@
         <el-menu
           :router="true"
           :unique-opened="true"
-          class="el-menu-vertical-demo">
-          <el-submenu index="1">
+          class="el-menu-vertical-demo siderbar">
+
+          <el-submenu
+            v-for="list in menusData"
+            :key="list.id"
+            :index="list.path">
             <template slot="title">
                 <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{list.authName}}</span>
             </template>
-            <el-menu-item-group>
-
-              <el-menu-item index="/user">
+              <el-menu-item
+                v-for="subList in list.children"
+                :key="subList.id"
+                :index="'/'+subList.path">
                 <i class="el-icon-loading"></i>
-                用户列表</el-menu-item>
-            </el-menu-item-group>
+                {{subList.authName}}
+              </el-menu-item>
           </el-submenu>
 
-          <el-submenu index="2">
+          <!-- <el-submenu index="2">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>权限管理</span>
               </template>
-              <el-menu-item-group>
                 <el-menu-item index="/roles"><i class="el-icon-loading"></i>角色列表</el-menu-item>
                 <el-menu-item index="/rights"><i class="el-icon-loading"></i>权限列表</el-menu-item>
-              </el-menu-item-group>
           </el-submenu>
 
           <el-submenu index="3">
@@ -53,11 +56,9 @@
                 <i class="el-icon-location"></i>
                 <span>商品管理</span>
               </template>
-              <el-menu-item-group>
                 <el-menu-item index="3-1"><i class="el-icon-loading"></i>商品列表</el-menu-item>
                 <el-menu-item index="3-2"><i class="el-icon-loading"></i>分类参数</el-menu-item>
                 <el-menu-item index="3-3"><i class="el-icon-loading"></i>商品分类</el-menu-item>
-              </el-menu-item-group>
           </el-submenu>
 
           <el-submenu index="4">
@@ -65,9 +66,7 @@
               <i class="el-icon-location"></i>
               <span>订单管理</span>
             </template>
-            <el-menu-item-group>
               <el-menu-item index="4-1"><i class="el-icon-loading"></i>订单列表</el-menu-item>
-            </el-menu-item-group>
           </el-submenu>
 
           <el-submenu index="5">
@@ -75,10 +74,8 @@
               <i class="el-icon-location"></i>
               <span>数据统计</span>
             </template>
-            <el-menu-item-group>
               <el-menu-item index="5-1"><i class="el-icon-loading"></i>数据列表</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
+          </el-submenu> -->
         </el-menu>
     </el-aside>
     <!-- main -->
@@ -93,18 +90,24 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      menusData: []
+    };
   },
-  beforeCreate() {
-    // 验证是否登录
-    const token = sessionStorage.getItem('token');
-    // if()
-    console.log(token);
-    if (!token) {
-      // 如果没有token  提示信息  跳转页面
-      this.$message.error('请登录！');
-      this.$router.push({name: 'login'});
-    }
+  // 去路由验证是否有token---------
+  // beforeCreate() {
+  //   // 验证是否登录
+  //   const token = sessionStorage.getItem('token');
+  //   // if()
+  //   console.log(token);
+  //   if (!token) {
+  //     // 如果没有token  提示信息  跳转页面
+  //     this.$message.error('请登录！');
+  //     this.$router.push({name: 'login'});
+  //   }
+  // },
+  created() {
+    this.loadData();
   },
   methods: {
     handelLogout() {
@@ -113,6 +116,12 @@ export default {
       // const token = sessionStorage.getItem('token');
       sessionStorage.clear();
       this.$router.push({name: 'login'});
+    },
+    // 加载侧边栏
+    async loadData() {
+      const res = await this.$http.get('menus');
+      console.log(res.data.data);
+      this.menusData = res.data.data;
     }
   }
 };
@@ -145,6 +154,10 @@ export default {
 }
 .aside {
   background-color: #d3dce6;
+}
+.siderbar {
+  background-color: #d3dce6;
+  height: 100%;
 }
 
 .main {
